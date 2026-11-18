@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Misi Koboi Tatabahasa: Ujian Pra (Tahun 3 SK)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka & Rye -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Rye&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --wood-dark: #451a03;
+      --wood-mid: #78350f;
+      --wood-light: #92400e;
+      --parchment-bg: #FDF5E6;
+      --sheriff-gold: #FFD700;
+    }
+
+    body {
+      font-family: 'Fredoka', sans-serif;
+      /* Latar belakang gurun senja hangat bergradien */
+      background: linear-gradient(
+        180deg,
+        #f97316 0%,
+        #fb923c 25%,
+        #fdba74 48%,
+        #f59e0b 68%,
+        #c2410c 88%,
+        #9a3412 100%
+      );
+      min-height: 100vh;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    .font-western {
+      font-family: 'Rye', serif;
+      letter-spacing: 0.04em;
+    }
+
+    /* Tekstur Papan Tanda Kayu Koboi */
+    .wood-board {
+      background: repeating-linear-gradient(
+        0deg,
+        #78350f,
+        #78350f 14px,
+        #662908 14px,
+        #662908 28px
+      );
+      border: 4px solid #451a03;
+      box-shadow: 0 8px 0 #451a03, 0 14px 24px rgba(69, 26, 3, 0.38);
+      position: relative;
+    }
+
+    /* Butang Papan Kayu Interaktif */
+    .wood-btn {
+      background: linear-gradient(180deg, #d97706 0%, #b45309 55%, #92400e 100%);
+      border: 3px solid #451a03;
+      box-shadow: 0 5px 0 #451a03;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+    }
+
+    .wood-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 0 #451a03;
+      background: linear-gradient(180deg, #f59e0b 0%, #d97706 55%, #b45309 100%);
+    }
+
+    .wood-btn:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #451a03;
+    }
+
+    /* Kad Kertas Lama (Parchment #FDF5E6) */
+    .parchment-card {
+      background-color: var(--parchment-bg);
+      background-image: radial-gradient(circle at top left, #fffdf8 0%, #FDF5E6 65%, #f5e2bc 100%);
+      border: 5px solid #78350f;
+      box-shadow:
+        inset 0 0 30px rgba(180, 83, 9, 0.2),
+        0 10px 0 #451a03,
+        0 18px 32px rgba(69, 26, 3, 0.35);
+      position: relative;
+    }
+
+    /* Bingkai Tali Laso */
+    .lasso-frame {
+      border: 3px dashed #92400e;
+      border-radius: 1.25rem;
+    }
+
+    /* Paku Logam di Penjuru */
+    .nail {
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle at 35% 35%, #f5f5f4, #57534e);
+      border-radius: 9999px;
+      border: 1.5px solid #292524;
+      position: absolute;
+      z-index: 5;
+    }
+
+    /* Gelembung Kata Syerif Arif */
+    .speech-bubble {
+      position: relative;
+      background: #ffffff;
+      border: 2.5px solid #78350f;
+      border-radius: 1rem;
+      box-shadow: 0 3px 0 #92400e;
+    }
+
+    @media (min-width: 640px) {
+      .speech-bubble::before {
+        content: "";
+        position: absolute;
+        left: -12px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-width: 8px 12px 8px 0;
+        border-style: solid;
+        border-color: transparent #78350f transparent transparent;
+      }
+      .speech-bubble::after {
+        content: "";
+        position: absolute;
+        left: -8px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-width: 6px 10px 6px 0;
+        border-style: solid;
+        border-color: transparent #ffffff transparent transparent;
+      }
+    }
+
+    /* Kad Pilihan Jawapan (A, B, C, D) */
+    .option-card {
+      background: linear-gradient(180deg, #fffdf7 0%, #fef3c7 100%);
+      border: 3px solid #92400e;
+      box-shadow: 0 4px 0 #78350f;
+      transition: all 0.15s ease;
+    }
+
+    .option-card:hover:not(:disabled) {
+      background: linear-gradient(180deg, #fef3c7 0%, #fde68a 100%);
+      border-color: #451a03;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #451a03;
+    }
+
+    .option-card:active:not(:disabled) {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #451a03;
+    }
+
+    .option-correct {
+      background: #dcfce7 !important;
+      border-color: #15803d !important;
+      box-shadow: 0 4px 0 #166534 !important;
+      color: #14532d !important;
+    }
+
+    .option-wrong {
+      background: #fee2e2 !important;
+      border-color: #b91c1c !important;
+      box-shadow: 0 4px 0 #991b1b !important;
+      color: #7f1d1d !important;
+    }
+
+    /* Animasi Tema Koboi */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes bounceHappy {
+      0%, 100% { transform: translateY(0) rotate(0deg) scale(1); }
+      30% { transform: translateY(-12px) rotate(-5deg) scale(1.06); }
+      65% { transform: translateY(-5px) rotate(5deg) scale(1.03); }
+    }
+
+    @keyframes shakeGentle {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    @keyframes starPulse {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(8deg) scale(1.08); }
+    }
+
+    @keyframes tumbleweedRoll {
+      0% { transform: translateX(-90px) rotate(0deg); }
+      100% { transform: translateX(calc(100vw + 90px)) rotate(720deg); }
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(-15px) rotate(0deg) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(190px) rotate(360deg) scale(0.45);
+        opacity: 0;
+      }
+    }
+
+    .animate-float {
+      animation: floatSlow 3s ease-in-out infinite;
+    }
+
+    .animate-happy {
+      animation: bounceHappy 0.7s ease-in-out;
+    }
+
+    .animate-shake {
+      animation: shakeGentle 0.4s ease-in-out;
+    }
+
+    .animate-star-pulse {
+      animation: starPulse 2.4s ease-in-out infinite;
+    }
+
+    .tumbleweed {
+      position: fixed;
+      bottom: 18px;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.6;
+      animation: tumbleweedRoll 30s linear infinite;
+    }
+
+    .confetti-piece {
+      position: fixed;
+      pointer-events: none;
+      z-index: 50;
+      font-size: 1.45rem;
+      animation: confettiFall 1.25s ease-out forwards;
+    }
+
+    /* Bar Skrol Tersuai */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FDF5E6;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #b45309;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="relative flex flex-col justify-between text-amber-950">
+
+  <!-- ==================== LATAR BELAKANG GURUN SENJA WILD WEST (SVG) ==================== -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+    <!-- Matahari Senja Keemasan -->
+    <div class="absolute top-6 right-8 md:right-20 w-24 h-24 md:w-32 md:h-32 rounded-full bg-amber-100/75 blur-sm"></div>
+    <div class="absolute top-8 right-10 md:right-22 w-20 h-20 md:w-28 md:h-28 rounded-full bg-yellow-50/95 shadow-lg"></div>
+
+    <!-- Siluet Bukit Gurun & Bukit Pasir Berlapis -->
+    <svg class="absolute bottom-0 left-0 w-full h-56 md:h-72" viewBox="0 0 1440 320" preserveAspectRatio="none">
+      <!-- Bukit Batu Gurun (Mesa) -->
+      <path fill="#9a3412" fill-opacity="0.38" d="M0,185 L110,185 L145,118 L315,118 L350,190 L570,190 L610,136 L765,136 L795,190 L1070,190 L1115,112 L1295,112 L1330,185 L1440,185 L1440,320 L0,320 Z"></path>
+      <!-- Bukit Pasir Lapisan Pertama -->
+      <path fill="#d97706" d="M0,215 Q360,180 720,215 T1440,200 L1440,320 L0,320 Z"></path>
+      <!-- Bukit Pasir Lapisan Kedua -->
+      <path fill="#9a3412" d="M0,248 Q420,278 880,238 T1440,252 L1440,320 L0,320 Z"></path>
+    </svg>
+
+    <!-- Kaktus Gurun Kiri -->
+    <svg class="hidden sm:block fixed bottom-12 left-5 w-20 h-32 text-emerald-800 opacity-85" viewBox="0 0 100 160" fill="currentColor">
+      <rect x="40" y="20" width="20" height="140" rx="10" />
+      <path d="M40,75 L22,75 Q14,75 14,65 L14,45 Q14,37 22,37 Q30,37 30,45 L30,60 L40,60 Z" />
+      <path d="M60,95 L78,95 Q86,95 86,85 L86,62 Q86,54 78,54 Q70,54 70,62 L70,80 L60,80 Z" />
+    </svg>
+
+    <!-- Kaktus Gurun Kanan -->
+    <svg class="hidden sm:block fixed bottom-10 right-7 w-16 h-28 text-emerald-900 opacity-80" viewBox="0 0 100 160" fill="currentColor">
+      <rect x="40" y="25" width="20" height="135" rx="10" />
+      <path d="M40,85 L22,85 Q14,85 14,75 L14,55 Q14,47 22,47 Q30,47 30,55 L30,70 L40,70 Z" />
+      <path d="M60,65 L78,65 Q86,65 86,55 L86,35 Q86,27 78,27 Q70,27 70,35 L70,50 L60,50 Z" />
+    </svg>
+
+    <!-- Animasi Tumbleweed Bergolek Perlahan -->
+    <svg class="tumbleweed w-12 h-12 text-amber-950" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.5">
+      <circle cx="32" cy="32" r="24" stroke-dasharray="6 4"/>
+      <path d="M12,26 Q32,10 52,28 M10,38 Q32,54 54,34 M24,10 Q42,32 22,54 M40,10 Q20,32 42,54" />
+    </svg>
+  </div>
+
+  <!-- ==================== KANDUNGAN UTAMA ==================== -->
+  <main class="relative z-10 max-w-4xl w-full mx-auto px-4 py-4 md:py-7 flex-grow flex flex-col justify-center">
+
+    <!-- Bar Atas: Lencana Tahun 3 SK & Togol Bunyi -->
+    <header class="flex items-center justify-between gap-2 mb-4">
+      <div class="flex items-center gap-2 bg-amber-950/90 text-amber-100 px-3.5 py-1.5 rounded-full border-2 border-[#FFD700] shadow">
+        <span class="text-base sm:text-lg">⭐</span>
+        <span class="text-xs sm:text-sm font-bold tracking-wide">BAHASA MELAYU TAHUN 3 SK</span>
+      </div>
+
+      <button
+        id="soundToggleBtn"
+        onclick="toggleSound()"
+        class="flex items-center gap-1.5 bg-amber-100 hover:bg-amber-200 text-amber-950 px-3.5 py-1.5 rounded-full border-2 border-amber-900 shadow font-bold text-xs sm:text-sm transition cursor-pointer"
+        title="Hidupkan atau Senyapkan Bunyi"
+      >
+        <span id="soundIcon">🔊</span>
+        <span id="soundLabel">Bunyi: Hidup</span>
+      </button>
+    </header>
+
+    <!-- ==================== SKRIN 1: SKRIN MULA (PENDAFTARAN MURID) ==================== -->
+    <section id="startScreen" class="parchment-card rounded-3xl p-5 sm:p-8 text-center">
+      <span class="nail top-3 left-3"></span>
+      <span class="nail top-3 right-3"></span>
+      <span class="nail bottom-3 left-3"></span>
+      <span class="nail bottom-3 right-3"></span>
+
+      <div class="lasso-frame p-4 sm:p-6">
+        <!-- Papan Tanda Kayu Utama -->
+        <div class="wood-board inline-block px-5 sm:px-8 py-3.5 rounded-2xl mb-4 transform -rotate-1">
+          <span class="nail top-2 left-2"></span>
+          <span class="nail top-2 right-2"></span>
+          <span class="nail bottom-2 left-2"></span>
+          <span class="nail bottom-2 right-2"></span>
+          <div class="flex items-center justify-center gap-2 text-[#FFD700] text-xs sm:text-sm font-bold uppercase tracking-widest mb-1">
+            <span>★</span>
+            <span>Penilaian Diagnostik Awal</span>
+            <span>★</span>
+          </div>
+          <h1 class="font-western text-xl sm:text-3xl md:text-4xl text-amber-50 drop-shadow">
+            Misi Koboi Tatabahasa: Ujian Pra
+          </h1>
+        </div>
+
+        <!-- Maskot Syerif Arif -->
+        <div class="flex justify-center my-2">
+          <div id="startMascotBox" class="animate-float bg-amber-200/85 border-4 border-amber-800 rounded-full p-3 shadow-inner">
+            <!-- Dijana melalui JavaScript -->
+          </div>
+        </div>
+
+        <h2 class="text-lg sm:text-2xl font-bold text-amber-950 mb-1.5">
+          Ayat Tunggal dan Ayat Majmuk • Bahasa Melayu Tahun 3 SK
+        </h2>
+        <p class="text-sm sm:text-base text-amber-900 max-w-xl mx-auto mb-5 leading-relaxed">
+          Selamat datang, koboi muda! Sertai <strong>Syerif Arif</strong> menjawab <strong>12 soalan Ujian Pra</strong> merentasi 3 tahap (<strong>Rendah</strong>, <strong>Sederhana</strong>, dan <strong>Tinggi</strong>). Rekod kamu akan disimpan secara automatik ke Google Sheets!
+        </p>
+
+        <!-- 3 Pos Kawalan Tahap -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto mb-5 text-left">
+          <div class="bg-emerald-50 border-2 border-emerald-600 rounded-2xl p-3 shadow-sm">
+            <div class="flex items-center gap-1.5 font-bold text-emerald-900 text-sm">
+              <span>🌵</span>
+              <span>Pos 1: Tahap Rendah</span>
+            </div>
+            <p class="text-xs text-emerald-800 mt-1">Soalan 1–4: Mengenal pasti ayat tunggal, ayat majmuk & kata hubung asas.</p>
+          </div>
+          <div class="bg-amber-50 border-2 border-amber-600 rounded-2xl p-3 shadow-sm">
+            <div class="flex items-center gap-1.5 font-bold text-amber-900 text-sm">
+              <span>🐎</span>
+              <span>Pos 2: Tahap Sederhana</span>
+            </div>
+            <p class="text-xs text-amber-800 mt-1">Soalan 5–8: Menggabung & mencerakinkan ayat dengan kata hubung sesuai.</p>
+          </div>
+          <div class="bg-rose-50 border-2 border-rose-600 rounded-2xl p-3 shadow-sm">
+            <div class="flex items-center gap-1.5 font-bold text-rose-900 text-sm">
+              <span>⭐</span>
+              <span>Pos 3: Tahap Tinggi</span>
+            </div>
+            <p class="text-xs text-rose-800 mt-1">Soalan 9–12: Ayat tunggal berpeluasan & pembinaan ayat majmuk gramatis.</p>
+          </div>
+        </div>
+
+        <!-- Borang Wajib Nama Penuh Murid & Kelas -->
+        <div class="max-w-lg mx-auto bg-amber-100/95 border-2 border-amber-800 rounded-2xl p-4 mb-5 text-left shadow-sm">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+            <div class="sm:col-span-7">
+              <label for="studentName" class="block text-xs font-extrabold text-amber-950 uppercase mb-1">
+                Nama Penuh Murid <span class="text-rose-600">*</span>
+              </label>
+              <input
+                id="studentName"
+                type="text"
+                placeholder="Contoh: Aina Sofea binti Ahmad"
+                oninput="clearStartError()"
+                class="w-full px-3.5 py-2.5 rounded-xl border-2 border-amber-700 bg-white text-amber-950 font-semibold text-sm sm:text-base focus:outline-none focus:border-amber-950"
+              />
+            </div>
+
+            <div class="sm:col-span-5">
+              <label for="studentClass" class="block text-xs font-extrabold text-amber-950 uppercase mb-1">
+                Kelas <span class="text-rose-600">*</span>
+              </label>
+              <input
+                id="studentClass"
+                type="text"
+                placeholder="Contoh: 3 Melur"
+                oninput="clearStartError()"
+                class="w-full px-3.5 py-2.5 rounded-xl border-2 border-amber-700 bg-white text-amber-950 font-semibold text-sm sm:text-base focus:outline-none focus:border-amber-950"
+              />
+            </div>
+          </div>
+
+          <!-- Pilihan Pantas Kelas Tahun 3 -->
+          <div class="mt-2.5 flex flex-wrap items-center gap-1.5">
+            <span class="text-[11px] font-bold text-amber-800 mr-1">Pilihan pantas kelas:</span>
+            <button type="button" onclick="pilihKelasPantas('3 Melur')" class="text-xs font-bold bg-amber-200 hover:bg-amber-300 text-amber-950 px-2.5 py-1 rounded-lg border border-amber-700 cursor-pointer transition">3 Melur</button>
+            <button type="button" onclick="pilihKelasPantas('3 Mawar')" class="text-xs font-bold bg-amber-200 hover:bg-amber-300 text-amber-950 px-2.5 py-1 rounded-lg border border-amber-700 cursor-pointer transition">3 Mawar</button>
+            <button type="button" onclick="pilihKelasPantas('3 Kenanga')" class="text-xs font-bold bg-amber-200 hover:bg-amber-300 text-amber-950 px-2.5 py-1 rounded-lg border border-amber-700 cursor-pointer transition">3 Kenanga</button>
+            <button type="button" onclick="pilihKelasPantas('3 Anggerik')" class="text-xs font-bold bg-amber-200 hover:bg-amber-300 text-amber-950 px-2.5 py-1 rounded-lg border border-amber-700 cursor-pointer transition">3 Anggerik</button>
+          </div>
+
+          <!-- Mesej Ralat Pengesahan Input -->
+          <p id="startErrorMsg" class="hidden mt-2.5 text-xs sm:text-sm font-bold text-rose-700 bg-rose-100 border border-rose-400 rounded-xl px-3 py-2">
+            ⚠️ Sila isi Nama Penuh Murid dan Kelas terlebih dahulu sebelum memulakan misi.
+          </p>
+        </div>
+
+        <!-- Butang Mula & Butang Reset Rekod Guru -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button
+            onclick="startQuiz()"
+            class="wood-btn text-amber-50 font-bold text-lg sm:text-xl px-8 py-4 rounded-2xl cursor-pointer inline-flex items-center gap-2"
+          >
+            <span>Mula Misi Ujian Pra 🤠</span>
+          </button>
+
+          <button
+            onclick="openResetModal()"
+            class="bg-amber-950 hover:bg-amber-900 text-amber-200 font-bold text-xs sm:text-sm px-4 py-3.5 rounded-2xl border-2 border-amber-700 shadow transition cursor-pointer inline-flex items-center gap-1.5"
+            title="Khas untuk Guru memadam rekod dalam Google Sheets"
+          >
+            <span>🔐 Reset Rekod (Guru)</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SKRIN 2: SKRIN KUIZ (12 SOALAN UJIAN PRA) ==================== -->
+    <section id="quizScreen" class="hidden">
+
+      <!-- Jejak Kemajuan Koboi (12 Titik Hentian & Ikon Kuda) -->
+      <div class="wood-board rounded-2xl p-3.5 sm:p-4 mb-4 text-amber-50">
+        <span class="nail top-2 left-2"></span>
+        <span class="nail top-2 right-2"></span>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2 px-1">
+          <div class="flex items-center gap-2">
+            <span class="bg-[#FFD700] text-amber-950 font-extrabold text-xs px-2.5 py-1 rounded-lg border border-amber-950">
+              Soalan <span id="qCounter">1</span> / 12
+            </span>
+            <span id="levelBadge" class="font-bold text-xs px-3 py-1 rounded-lg border">
+              Tahap Rendah: Soalan 1–4
+            </span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <span id="hudStudentName" class="text-xs sm:text-sm font-semibold text-amber-200 hidden sm:inline">
+              🤠 Murid (3 Melur)
+            </span>
+            <div class="flex items-center gap-1.5 bg-amber-950/90 px-3 py-1 rounded-full border border-[#FFD700]">
+              <span>⭐</span>
+              <span id="scoreCounter" class="font-extrabold text-[#FFD700] text-sm">0</span>
+              <span class="text-xs text-amber-200">Bintang</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bar Kemajuan Mendatar dengan 12 Titik Hentian & Ikon Kuda Koboi -->
+        <div class="relative pt-7 pb-1 px-2">
+          <!-- Ikon Kuda Koboi Bergerak -->
+          <div
+            id="horseMarker"
+            class="absolute top-0 transition-all duration-500 -translate-x-1/2 text-2xl drop-shadow z-10"
+            style="left: 4.16%;"
+            title="Kedudukan Koboi"
+          >
+            🐎
+          </div>
+
+          <!-- Trek Mendatar -->
+          <div class="relative flex items-center justify-between">
+            <!-- Garis Laluan Latar -->
+            <div class="absolute left-2 right-2 h-2 bg-amber-950 rounded-full border border-amber-700"></div>
+            <!-- Garis Laluan Kemajuan -->
+            <div
+              id="trailFill"
+              class="absolute left-2 h-2 bg-gradient-to-r from-emerald-400 via-[#FFD700] to-rose-400 rounded-full transition-all duration-500"
+              style="width: 0%;"
+            ></div>
+            <!-- 12 Titik Hentian -->
+            <div id="trailDotsContainer" class="relative z-10 w-full flex items-center justify-between">
+              <!-- Dijana melalui JavaScript -->
+            </div>
+          </div>
+
+          <!-- 3 Penanda Pos Kawalan Tahap -->
+          <div class="grid grid-cols-3 text-[10px] sm:text-xs font-bold text-amber-200 mt-2">
+            <div class="text-left">📍 Tahap Rendah (1–4)</div>
+            <div class="text-center">📍 Tahap Sederhana (5–8)</div>
+            <div class="text-right">📍 Tahap Tinggi (9–12)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kad Soalan Kertas Lama (#FDF5E6) -->
+      <div id="questionCard" class="parchment-card rounded-3xl p-4 sm:p-6">
+        <span class="nail top-3 left-3"></span>
+        <span class="nail top-3 right-3"></span>
+        <span class="nail bottom-3 left-3"></span>
+        <span class="nail bottom-3 right-3"></span>
+
+        <div class="lasso-frame p-4 sm:p-6">
+          <!-- Maskot Syerif Arif & Gelembung Kata Dinamik (Tiada Petunjuk) -->
+          <div class="flex items-center gap-3 mb-4 pb-3 border-b-2 border-dashed border-amber-800/40">
+            <div id="quizMascotContainer" class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-amber-200/90 border-2 border-amber-800 flex items-center justify-center shrink-0 shadow-sm overflow-hidden">
+              <!-- SVG Syerif Arif dinamik -->
+            </div>
+            <div class="speech-bubble px-3.5 py-2.5 flex-grow">
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-amber-700 block">
+                Syerif Arif:
+              </span>
+              <p id="mascotSpeech" class="text-xs sm:text-sm font-semibold text-amber-950 leading-snug">
+                "Fikir dengan tenang dan baca setiap pilihan dengan teliti, koboi!"
+              </p>
+            </div>
+          </div>
+
+          <!-- Teks Soalan & Kotak Ayat Rangsangan -->
+          <div class="mb-5">
+            <h3 id="questionText" class="text-base sm:text-xl md:text-2xl font-bold text-amber-950 leading-snug">
+              Soalan dipaparkan di sini...
+            </h3>
+
+            <!-- Kotak Ayat Rangsangan -->
+            <div
+              id="stimulusBox"
+              class="hidden mt-3.5 bg-amber-100/95 border-2 border-amber-700 border-l-8 border-l-amber-900 rounded-2xl p-3.5 sm:p-4 shadow-inner"
+            >
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-amber-800 block mb-1">
+                📜 Ayat Rangsangan:
+              </span>
+              <p id="stimulusText" class="text-sm sm:text-lg font-bold text-amber-950 whitespace-pre-line leading-relaxed"></p>
+            </div>
+          </div>
+
+          <!-- 4 Pilihan Jawapan (A, B, C, D) -->
+          <div id="optionsContainer" class="grid grid-cols-1 gap-3">
+            <!-- Dijana melalui JavaScript -->
+          </div>
+
+          <!-- Kotak Penjelasan Tatabahasa (Muncul selepas murid menjawab) -->
+          <div id="feedbackPanel" class="hidden mt-5 rounded-2xl p-4 sm:p-5 border-2 transition-all">
+            <div class="flex items-start gap-3">
+              <div id="feedbackIcon" class="text-3xl shrink-0">🌟</div>
+              <div class="flex-grow">
+                <h4 id="feedbackTitle" class="font-extrabold text-base sm:text-lg mb-1">
+                  Syabas! Jawapan Kamu Tepat!
+                </h4>
+                <div class="bg-white/85 rounded-xl p-3 border border-amber-300 mt-1.5">
+                  <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 block mb-0.5">
+                    Penjelasan Tatabahasa:
+                  </span>
+                  <p id="feedbackExplanation" class="text-sm sm:text-base leading-relaxed font-medium text-amber-950">
+                    Penjelasan tatabahasa di sini.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 flex justify-end">
+              <button
+                id="nextBtn"
+                onclick="nextQuestion()"
+                class="wood-btn text-amber-50 font-bold text-base sm:text-lg px-6 py-2.5 rounded-xl cursor-pointer inline-flex items-center gap-2"
+              >
+                <span id="nextBtnText">Soalan Seterusnya ➔</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== SKRIN 3: SKRIN KEPUTUSAN UJIAN PRA ==================== -->
+    <section id="resultScreen" class="hidden parchment-card rounded-3xl p-5 sm:p-8">
+      <span class="nail top-3 left-3"></span>
+      <span class="nail top-3 right-3"></span>
+      <span class="nail bottom-3 left-3"></span>
+      <span class="nail bottom-3 right-3"></span>
+
+      <div class="lasso-frame p-4 sm:p-6">
+        <div class="text-center">
+          <div class="wood-board inline-block px-6 py-2.5 rounded-2xl mb-4">
+            <span class="nail top-2 left-2"></span>
+            <span class="nail top-2 right-2"></span>
+            <h2 class="font-western text-lg sm:text-3xl text-[#FFD700]">
+              Sijil Pencapaian Ujian Pra
+            </h2>
+          </div>
+
+          <!-- Lencana Bintang Syerif (#FFD700) -->
+          <div class="my-2 flex flex-col items-center">
+            <div class="animate-star-pulse mb-2">
+              <svg class="w-20 h-20 sm:w-24 sm:h-24 drop-shadow-md" viewBox="0 0 120 120">
+                <polygon
+                  points="60,8 73,40 108,42 81,64 90,98 60,79 30,98 39,64 12,42 47,40"
+                  fill="#FFD700"
+                  stroke="#78350f"
+                  stroke-width="4"
+                  stroke-linejoin="round"
+                />
+                <circle cx="60" cy="8" r="5" fill="#fef08a" stroke="#78350f" stroke-width="2"/>
+                <circle cx="108" cy="42" r="5" fill="#fef08a" stroke="#78350f" stroke-width="2"/>
+                <circle cx="90" cy="98" r="5" fill="#fef08a" stroke="#78350f" stroke-width="2"/>
+                <circle cx="30" cy="98" r="5" fill="#fef08a" stroke="#78350f" stroke-width="2"/>
+                <circle cx="12" cy="42" r="5" fill="#fef08a" stroke="#78350f" stroke-width="2"/>
+                <text x="60" y="64" text-anchor="middle" font-size="13" font-weight="bold" fill="#78350f">KOBOI</text>
+              </svg>
+            </div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-amber-700">Gelaran Pencapaian Ujian Pra</span>
+            <h3 id="rankTitle" class="text-2xl sm:text-3xl font-extrabold text-amber-950 mt-0.5">
+              Syerif Utama
+            </h3>
+            <p id="resultStudentMeta" class="text-sm sm:text-base font-semibold text-amber-800 mt-1">
+              Murid: Aina Sofea • Kelas: 3 Melur
+            </p>
+            <p id="resultDateText" class="text-xs font-bold text-amber-700 mt-0.5">
+              Tarikh: 19 November 2026
+            </p>
+          </div>
+
+          <!-- Kotak Status Penghantaran Automatik ke Google Sheets -->
+          <div id="sheetsStatusBox" class="max-w-xl mx-auto my-4 p-3.5 rounded-2xl border-2 bg-amber-100 border-amber-600 text-amber-950 transition-all">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5">
+              <p id="sheetsStatusText" class="text-xs sm:text-sm font-bold">
+                ⏳ Sedang menyimpan rekod ke Google Sheets...
+              </p>
+              <button
+                id="retrySubmitBtn"
+                onclick="hantarRekodKeGoogleSheets()"
+                class="hidden bg-amber-800 hover:bg-amber-900 text-amber-50 font-bold text-xs px-3.5 py-2 rounded-xl border border-amber-950 shadow-sm cursor-pointer transition shrink-0"
+              >
+                🔄 Cuba Hantar Semula
+              </button>
+            </div>
+          </div>
+
+          <!-- Kad Markah Keseluruhan & Peratus -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-lg mx-auto my-4">
+            <div class="bg-amber-100 border-2 border-amber-800 rounded-2xl p-3">
+              <div class="text-xs font-bold text-amber-800 uppercase">Jumlah Markah</div>
+              <div id="finalScoreText" class="text-2xl sm:text-3xl font-extrabold text-amber-950">0 / 12</div>
+            </div>
+            <div class="bg-yellow-100 border-2 border-yellow-600 rounded-2xl p-3">
+              <div class="text-xs font-bold text-yellow-800 uppercase">Peratus</div>
+              <div id="finalPercentText" class="text-2xl sm:text-3xl font-extrabold text-yellow-900">0%</div>
+            </div>
+            <div class="col-span-2 sm:col-span-1 bg-emerald-100 border-2 border-emerald-600 rounded-2xl p-3">
+              <div class="text-xs font-bold text-emerald-800 uppercase">Bintang Emas</div>
+              <div id="finalStarsText" class="text-2xl sm:text-3xl font-extrabold text-emerald-900">0 ⭐</div>
+            </div>
+          </div>
+
+          <!-- Pecahan Prestasi Mengikut 3 Tahap -->
+          <div class="bg-white/85 border-2 border-amber-800 rounded-2xl p-4 max-w-2xl mx-auto mb-5 text-left">
+            <h4 class="font-extrabold text-amber-950 text-sm sm:text-base mb-3 flex items-center gap-2">
+              <span>📊</span>
+              <span>Pecahan Skor Mengikut Tahap Kesukaran</span>
+            </h4>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="bg-emerald-50 border border-emerald-500 rounded-xl p-3">
+                <div class="text-xs font-bold text-emerald-900">🌵 Tahap Rendah (S1–S4)</div>
+                <div id="tierLowScore" class="text-xl font-extrabold text-emerald-950 mt-0.5">0 / 4</div>
+                <div id="tierLowStatus" class="text-xs font-semibold text-emerald-700 mt-0.5">Menguasai</div>
+              </div>
+              <div class="bg-amber-50 border border-amber-500 rounded-xl p-3">
+                <div class="text-xs font-bold text-amber-900">🐎 Tahap Sederhana (S5–S8)</div>
+                <div id="tierMidScore" class="text-xl font-extrabold text-amber-950 mt-0.5">0 / 4</div>
+                <div id="tierMidStatus" class="text-xs font-semibold text-amber-700 mt-0.5">Menguasai</div>
+              </div>
+              <div class="bg-rose-50 border border-rose-500 rounded-xl p-3">
+                <div class="text-xs font-bold text-rose-900">⭐ Tahap Tinggi (S9–S12)</div>
+                <div id="tierHighScore" class="text-xl font-extrabold text-rose-950 mt-0.5">0 / 4</div>
+                <div id="tierHighStatus" class="text-xs font-semibold text-rose-700 mt-0.5">Menguasai</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bahagian Semakan Jawapan Lengkap (Boleh Buka/Tutup) -->
+        <div class="max-w-2xl mx-auto mb-6">
+          <button
+            id="toggleReviewBtn"
+            onclick="toggleReviewSection()"
+            class="w-full bg-amber-200/95 hover:bg-amber-300 text-amber-950 font-extrabold text-sm sm:text-base px-4 py-3 rounded-2xl border-2 border-amber-800 shadow-sm transition cursor-pointer flex items-center justify-between"
+          >
+            <span class="flex items-center gap-2">
+              <span>📜</span>
+              <span>Semakan Jawapan Lengkap (12 Soalan)</span>
+            </span>
+            <span id="reviewChevron" class="text-xs sm:text-sm bg-amber-800 text-amber-50 px-2.5 py-1 rounded-lg">
+              Buka ▼
+            </span>
+          </button>
+
+          <div id="reviewContainer" class="hidden mt-3 space-y-3 max-h-96 overflow-y-auto pr-1">
+            <!-- Dijana melalui JavaScript -->
+          </div>
+        </div>
+
+        <!-- Notifikasi Salin Rekod -->
+        <div id="copyToast" class="hidden max-w-md mx-auto mb-4 bg-emerald-700 text-white font-bold text-xs sm:text-sm py-2 px-4 rounded-full text-center shadow">
+          ✅ Rekod Ujian Pra berjaya disalin ke papan keratan!
+        </div>
+
+        <!-- Butang Tindakan Akhir -->
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <button
+            onclick="copyReport()"
+            id="copyReportBtn"
+            class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm sm:text-base px-5 py-3.5 rounded-xl border-2 border-emerald-950 shadow transition cursor-pointer inline-flex items-center gap-2"
+          >
+            <span>Salin Rekod Ujian Pra 📋</span>
+          </button>
+
+          <button
+            onclick="restartQuiz()"
+            class="wood-btn text-amber-50 font-bold text-sm sm:text-base px-6 py-3.5 rounded-xl cursor-pointer inline-flex items-center gap-2"
+          >
+            <span>Main Semula 🔄</span>
+          </button>
+
+          <button
+            onclick="openResetModal()"
+            class="bg-amber-950 hover:bg-amber-900 text-amber-200 font-bold text-sm sm:text-base px-5 py-3.5 rounded-xl border-2 border-amber-700 shadow transition cursor-pointer inline-flex items-center gap-2"
+          >
+            <span>🔐 Reset Rekod (Guru)</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== MODAL DIALOG RESET REKOD GURU (PIN) ==================== -->
+  <div id="resetModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-amber-950/75 backdrop-blur-xs">
+    <div class="parchment-card rounded-3xl max-w-md w-full p-5 sm:p-7 text-center animate-float">
+      <span class="nail top-3 left-3"></span>
+      <span class="nail top-3 right-3"></span>
+      <span class="nail bottom-3 left-3"></span>
+      <span class="nail bottom-3 right-3"></span>
+
+      <div class="lasso-frame p-4 sm:p-5">
+        <div class="wood-board inline-block px-5 py-2 rounded-xl mb-3">
+          <h3 class="font-western text-base sm:text-xl text-[#FFD700]">
+            🔐 Kawalan Khas Guru
+          </h3>
+        </div>
+
+        <p class="text-xs sm:text-sm font-bold text-rose-800 bg-rose-100 border-2 border-rose-500 rounded-xl p-3 mb-4 leading-relaxed">
+          ⚠️ <strong>Amaran Penting:</strong> Tindakan ini akan memadam <strong>SEMUA rekod murid Ujian Pra</strong> yang tersimpan di dalam Google Sheets secara kekal!
+        </p>
+
+        <div class="text-left mb-4">
+          <label for="teacherPinInput" class="block text-xs font-extrabold text-amber-950 uppercase mb-1">
+            Masukkan PIN Guru:
+          </label>
+          <input
+            id="teacherPinInput"
+            type="password"
+            placeholder="••••"
+            onkeydown="if(event.key === 'Enter') confirmResetRecords()"
+            class="w-full px-4 py-2.5 rounded-xl border-2 border-amber-800 bg-white text-amber-950 font-bold text-center text-lg tracking-widest focus:outline-none focus:border-amber-950"
+          />
+        </div>
+
+        <!-- Paparan Mesej Maklum Balas daripada Pelayan -->
+        <div id="resetModalFeedback" class="hidden mb-4 p-3 rounded-xl border-2 text-xs sm:text-sm font-bold"></div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-2.5">
+          <button
+            id="confirmResetBtn"
+            onclick="confirmResetRecords()"
+            class="w-full sm:w-auto bg-rose-700 hover:bg-rose-800 text-white font-bold text-sm px-5 py-3 rounded-xl border-2 border-rose-950 shadow cursor-pointer transition"
+          >
+            Sahkan &amp; Reset Rekod
+          </button>
+
+          <button
+            type="button"
+            onclick="closeResetModal()"
+            class="w-full sm:w-auto bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold text-sm px-5 py-3 rounded-xl border-2 border-amber-800 shadow-sm cursor-pointer transition"
+          >
+            Batal
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="relative z-10 text-center py-3 text-xs font-bold text-amber-100 drop-shadow">
+    Misi Koboi Tatabahasa: Ujian Pra • Bahasa Melayu Tahun 3 (SK)
+  </footer>
+
+  <script>
+    // ==================== KONFIGURASI GOOGLE APPS SCRIPT WEB APP ====================
+    const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbzXVBpYLtjKw_56NWcLgJKW79AtopRpePO9qglaqJcI0XkCOBkQ0usChbFjHYth1HZ8/exec";
+
+    // ==================== ILUSTRASI SVG MASKOT SYERIF ARIF ====================
+    function getSheriffSvg(mood = 'neutral', sizeClass = 'w-20 h-20') {
+      let eyesMarkup = `
+        <circle cx="51" cy="61" r="3.2" fill="#451a03"/>
+        <circle cx="69" cy="61" r="3.2" fill="#451a03"/>
+        <circle cx="52" cy="60" r="1.1" fill="#ffffff"/>
+        <circle cx="70" cy="60" r="1.1" fill="#ffffff"/>
+      `;
+      let mouthMarkup = `
+        <path d="M51,71 Q60,80 69,71" fill="none" stroke="#451a03" stroke-width="3" stroke-linecap="round"/>
+      `;
+
+      if (mood === 'happy') {
+        eyesMarkup = `
+          <path d="M46,61 Q51,55 56,61" fill="none" stroke="#451a03" stroke-width="3" stroke-linecap="round"/>
+          <path d="M64,61 Q69,55 74,61" fill="none" stroke="#451a03" stroke-width="3" stroke-linecap="round"/>
+        `;
+        mouthMarkup = `
+          <path d="M50,70 Q60,83 70,70 Z" fill="#dc2626" stroke="#451a03" stroke-width="2.5" stroke-linejoin="round"/>
+        `;
+      } else if (mood === 'encourage') {
+        eyesMarkup = `
+          <path d="M46,55 L55,57" stroke="#451a03" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M74,55 L65,57" stroke="#451a03" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="51" cy="62" r="3" fill="#451a03"/>
+          <circle cx="69" cy="62" r="3" fill="#451a03"/>
+        `;
+        mouthMarkup = `
+          <path d="M53,73 Q60,77 67,73" fill="none" stroke="#451a03" stroke-width="2.8" stroke-linecap="round"/>
+        `;
+      }
+
+      return `
+        <svg class="${sizeClass}" viewBox="0 0 120 120">
+          <!-- Tepian Topi Koboi -->
+          <ellipse cx="60" cy="42" rx="48" ry="12" fill="#78350f" stroke="#451a03" stroke-width="3"/>
+          <!-- Mahkota Topi Koboi -->
+          <path d="M33,42 C33,18 46,14 60,20 C74,14 87,18 87,42 Z" fill="#92400e" stroke="#451a03" stroke-width="3"/>
+          <rect x="35" y="34" width="50" height="6" fill="#FFD700" stroke="#451a03" stroke-width="1.5"/>
+          <!-- Lencana Bintang Emas pada Topi -->
+          <polygon points="60,23 62,28 67,28 63,31 64,36 60,33 56,36 57,31 53,28 58,28" fill="#fef08a" stroke="#451a03" stroke-width="1"/>
+          <!-- Wajah -->
+          <circle cx="60" cy="64" r="24" fill="#fed7aa" stroke="#451a03" stroke-width="3"/>
+          ${eyesMarkup}
+          <!-- Pipi Merah -->
+          <ellipse cx="45" cy="68" rx="4" ry="2.5" fill="#fb7185" opacity="0.6"/>
+          <ellipse cx="75" cy="68" rx="4" ry="2.5" fill="#fb7185" opacity="0.6"/>
+          ${mouthMarkup}
+          <!-- Skaf Merah Koboi -->
+          <path d="M38,85 L82,85 L60,108 Z" fill="#dc2626" stroke="#451a03" stroke-width="3" stroke-linejoin="round"/>
+          <!-- Lencana Bintang Syerif Emas (#FFD700) -->
+          <polygon points="60,82 62.5,87.5 68.5,88 64,92 65.5,98 60,94.5 54.5,98 56,92 51.5,88 57.5,87.5" fill="#FFD700" stroke="#451a03" stroke-width="1.5"/>
+        </svg>
+      `;
+    }
+
+    // ==================== KESAN BUNYI WEB AUDIO API ====================
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundIcon').textContent = soundEnabled ? '🔊' : '🔇';
+      document.getElementById('soundLabel').textContent = soundEnabled ? 'Bunyi: Hidup' : 'Bunyi: Senyap';
+      if (soundEnabled) playTone('woodClick');
+    }
+
+    function playTone(type) {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+
+        if (type === 'woodClick') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(340, now);
+          osc.frequency.exponentialRampToValueAtTime(130, now + 0.08);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'correct') {
+          const notes = [329.63, 440.00, 554.37, 659.25, 880.00];
+          notes.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = idx < 2 ? 'sawtooth' : 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.065);
+            gain.gain.setValueAtTime(idx < 2 ? 0.11 : 0.22, now + idx * 0.065);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.065 + 0.28);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.065);
+            osc.stop(now + idx * 0.065 + 0.28);
+          });
+        } else if (type === 'wrong') {
+          const notes = [246.94, 196.00];
+          notes.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.14);
+            gain.gain.setValueAtTime(0.16, now + idx * 0.14);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.14 + 0.25);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.14);
+            osc.stop(now + idx * 0.14 + 0.25);
+          });
+        } else if (type === 'fanfare') {
+          const notes = [392.00, 493.88, 587.33, 783.99, 587.33, 987.77];
+          notes.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.11);
+            gain.gain.setValueAtTime(0.24, now + idx * 0.11);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.11 + 0.36);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.11);
+            osc.stop(now + idx * 0.11 + 0.36);
+          });
+        }
+      } catch (err) {
+        // Abaikan ralat audio jika pelayar menyekat audio automatik
+      }
+    }
+
+    // ==================== ANIMASI KONFETI BINTANG EMAS ====================
+    function triggerStarConfetti() {
+      const icons = ['⭐', '🌟', '✨', '🤠', '🏆'];
+      for (let i = 0; i < 18; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.textContent = icons[i % icons.length];
+        el.style.left = `${12 + Math.random() * 76}vw`;
+        el.style.top = `${12 + Math.random() * 25}vh`;
+        el.style.animationDelay = `${Math.random() * 0.25}s`;
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1500);
+      }
+    }
+
+    // ==================== SENARAI 12 SOALAN UJIAN PRA ====================
+    const preTestQuestions = [
+      // --- Bahagian A: Tahap Rendah (S1 - S4) ---
+      {
+        id: 1,
+        tier: 'rendah',
+        tierBadge: 'Tahap Rendah: Soalan 1–4',
+        promptSpeech: '"Selamat memulakan Ujian Pra, koboi! Baca setiap ayat dengan teliti."',
+        question: 'Antara ayat yang berikut, manakah yang merupakan ayat tunggal?',
+        stimulus: '',
+        options: [
+          { text: 'Aina membaca buku cerita di ruang tamu.', isCorrect: true },
+          { text: 'Ali dan Abu bermain bola sepak di padang.', isCorrect: false },
+          { text: 'Ibu memasak nasi sambil mendengar radio.', isCorrect: false },
+          { text: 'Adik menangis kerana terjatuh dari basikal.', isCorrect: false }
+        ],
+        explanation: 'Ayat tunggal mempunyai satu subjek (Aina) dan satu predikat (membaca buku cerita di ruang tamu) tanpa kata hubung.'
+      },
+      {
+        id: 2,
+        tier: 'rendah',
+        tierBadge: 'Tahap Rendah: Soalan 1–4',
+        promptSpeech: '"Teruskan langkahmu dengan yakin! Teliti keempat-empat ayat di bawah ini."',
+        question: 'Pilih ayat yang tergolong sebagai ayat majmuk.',
+        stimulus: '',
+        options: [
+          { text: 'Murid-murid beratur dengan tertib di luar kelas.', isCorrect: false },
+          { text: 'Kakak menyiram pokok bunga di halaman rumah.', isCorrect: false },
+          { text: 'Zaki minum segelas susu lalu pergi ke sekolah.', isCorrect: true },
+          { text: 'Kucing comel itu sedang tidur di atas sofa.', isCorrect: false }
+        ],
+        explanation: "Ayat majmuk menggabungkan dua ayat tunggal menggunakan kata hubung, iaitu 'lalu'."
+      },
+      {
+        id: 3,
+        tier: 'rendah',
+        tierBadge: 'Tahap Rendah: Soalan 1–4',
+        promptSpeech: '"Baca ayat rangsangan di bawah dengan cermat sebelum memilih jawapan kamu."',
+        question: 'Apakah kata hubung yang digunakan dalam ayat majmuk di atas?',
+        stimulus: '"Nenek menyapu daun kering di halaman rumah sambil berbual dengan datuk."',
+        options: [
+          { text: 'di', isCorrect: false },
+          { text: 'sambil', isCorrect: true },
+          { text: 'dengan', isCorrect: false },
+          { text: 'menyapu', isCorrect: false }
+        ],
+        explanation: "Kata hubung 'sambil' digunakan untuk menggabungkan dua perbuatan yang dilakukan serentak."
+      },
+      {
+        id: 4,
+        tier: 'rendah',
+        tierBadge: 'Tahap Rendah: Soalan 1–4',
+        promptSpeech: '"Satu soalan lagi di Pos 1! Pilih perkataan yang paling sesuai melengkapkan ayat ini."',
+        question: 'Amir tidak hadir ke sekolah pada hari ini ________ dia sakit perut.',
+        stimulus: '',
+        options: [
+          { text: 'dan', isCorrect: false },
+          { text: 'atau', isCorrect: false },
+          { text: 'tetapi', isCorrect: false },
+          { text: 'kerana', isCorrect: true }
+        ],
+        explanation: "Kata hubung 'kerana' digunakan untuk menyatakan sebab Amir tidak hadir ke sekolah."
+      },
+
+      // --- Bahagian B: Tahap Sederhana (S5 - S8) ---
+      {
+        id: 5,
+        tier: 'sederhana',
+        tierBadge: 'Tahap Sederhana: Soalan 5–8',
+        promptSpeech: '"Selamat tiba di Pos 2: Tahap Sederhana! Fikirkan cara menggabungkan kedua-dua ayat ini."',
+        question: 'Gabungkan dua ayat tunggal di bawah menjadi satu ayat majmuk yang betul.',
+        stimulus: 'Ayat 1: Siti membeli sebatang pensel.\nAyat 2: Siti membeli sebuah buku tulis.',
+        options: [
+          { text: 'Siti membeli sebatang pensel dan sebuah buku tulis.', isCorrect: true },
+          { text: 'Siti membeli sebatang pensel tetapi sebuah buku tulis.', isCorrect: false },
+          { text: 'Siti membeli sebatang pensel kerana sebuah buku tulis.', isCorrect: false },
+          { text: 'Siti membeli sebatang pensel lalu sebuah buku tulis.', isCorrect: false }
+        ],
+        explanation: "Kata hubung 'dan' digunakan untuk menggabungkan dua perkara yang setara."
+      },
+      {
+        id: 6,
+        tier: 'sederhana',
+        tierBadge: 'Tahap Sederhana: Soalan 5–8',
+        promptSpeech: '"Perhatikan maksud kedua-dua ayat tunggal dalam kotak rangsangan dengan teliti!"',
+        question: 'Pilih ayat majmuk yang paling tepat apabila dua ayat tunggal di bawah digabungkan.',
+        stimulus: 'Ayat 1: Abang suka makan buah durian.\nAyat 2: Adik tidak suka makan buah durian.',
+        options: [
+          { text: 'Abang suka makan buah durian dan adik tidak suka.', isCorrect: false },
+          { text: 'Abang suka makan buah durian atau adik tidak suka.', isCorrect: false },
+          { text: 'Abang suka makan buah durian tetapi adik tidak suka.', isCorrect: true },
+          { text: 'Abang suka makan buah durian sambil adik tidak suka.', isCorrect: false }
+        ],
+        explanation: "Kata hubung 'tetapi' digunakan untuk menunjukkan maksud yang berlawanan."
+      },
+      {
+        id: 7,
+        tier: 'sederhana',
+        tierBadge: 'Tahap Sederhana: Soalan 5–8',
+        promptSpeech: '"Sekarang uji kebolehan kamu memisahkan ayat majmuk kepada dua ayat tunggal!"',
+        question: 'Cerakinkan ayat majmuk di bawah kepada dua ayat tunggal yang betul.',
+        stimulus: '"Ibu menggoreng ikan sambil mendengar lagu di dapur."',
+        options: [
+          { text: 'Ayat 1: Ibu menggoreng ikan di dapur. / Ayat 2: Ibu mendengar lagu di dapur.', isCorrect: true },
+          { text: 'Ayat 1: Ibu menggoreng ikan. / Ayat 2: Lagu mendengar ibu di dapur.', isCorrect: false },
+          { text: 'Ayat 1: Ibu menggoreng ikan sambil. / Ayat 2: Mendengar lagu di dapur.', isCorrect: false },
+          { text: 'Ayat 1: Ibu dan lagu di dapur. / Ayat 2: Ibu menggoreng ikan.', isCorrect: false }
+        ],
+        explanation: "Apabila dicerakinkan, kata hubung 'sambil' digugurkan dan subjek 'Ibu' dikekalkan pada kedua-dua ayat tunggal."
+      },
+      {
+        id: 8,
+        tier: 'sederhana',
+        tierBadge: 'Tahap Sederhana: Soalan 5–8',
+        promptSpeech: '"Selesaikan cabaran terakhir di Pos 2 ini dengan penuh keyakinan, koboi!"',
+        question: 'Gabungkan dua ayat tunggal di bawah supaya menjadi satu ayat majmuk yang gramatis.',
+        stimulus: 'Ayat 1: Pokok bunga itu tumbuh subur.\nAyat 2: Hana menyiram pokok bunga itu setiap hari.',
+        options: [
+          { text: 'Pokok bunga itu tumbuh subur tetapi Hana menyiramnya setiap hari.', isCorrect: false },
+          { text: 'Pokok bunga itu tumbuh subur atau Hana menyiramnya setiap hari.', isCorrect: false },
+          { text: 'Pokok bunga itu tumbuh subur kerana Hana menyiramnya setiap hari.', isCorrect: true },
+          { text: 'Pokok bunga itu tumbuh subur sambil Hana menyiramnya setiap hari.', isCorrect: false }
+        ],
+        explanation: "Kata hubung 'kerana' menghubungkan kesan (pokok tumbuh subur) dengan sebabnya (Hana menyiramnya setiap hari)."
+      },
+
+      // --- Bahagian C: Tahap Tinggi (S9 - S12) ---
+      {
+        id: 9,
+        tier: 'tinggi',
+        tierBadge: 'Tahap Tinggi: Soalan 9–12',
+        promptSpeech: '"Kamu sudah mara ke Pos 3: Tahap Tinggi! Teliti struktur setiap ayat di bawah."',
+        question: 'Walaupun semua ayat di bawah panjang, manakah yang sebenarnya merupakan ayat tunggal?',
+        stimulus: '',
+        options: [
+          { text: 'Murid-murid Tahun Tiga Melur menyapu sampah dan mengelap tingkap kelas.', isCorrect: false },
+          { text: 'Murid-murid Tahun Tiga Melur sedang membersihkan kelas mereka pada waktu pagi.', isCorrect: true },
+          { text: 'Murid-murid Tahun Tiga Melur bekerjasama supaya kelas mereka sentiasa bersih.', isCorrect: false },
+          { text: 'Murid-murid Tahun Tiga Melur berasa gembira kerana kelas mereka memenangi pertandingan kebersihan.', isCorrect: false }
+        ],
+        explanation: "Ayat B hanya mempunyai satu subjek dan satu predikat dengan peluasan keterangan waktu ('pada waktu pagi'), tanpa sebarang kata hubung."
+      },
+      {
+        id: 10,
+        tier: 'tinggi',
+        tierBadge: 'Tahap Tinggi: Soalan 9–12',
+        promptSpeech: '"Semak setiap ayat dengan teliti sebelum memilih pasangan yang paling tepat."',
+        question: 'Pilih pasangan ayat tunggal yang tepat apabila ayat majmuk di bawah dicerakinkan.',
+        stimulus: '"Ayah mencuci longkang manakala abang membuang sampah ke dalam tong."',
+        options: [
+          { text: 'Ayat 1: Ayah dan abang mencuci longkang. / Ayat 2: Abang membuang sampah.', isCorrect: false },
+          { text: 'Ayat 1: Ayah mencuci longkang. / Ayat 2: Abang membuang sampah ke dalam tong.', isCorrect: true },
+          { text: 'Ayat 1: Ayah mencuci longkang manakala. / Ayat 2: Abang membuang sampah.', isCorrect: false },
+          { text: 'Ayat 1: Ayah membuang sampah ke dalam tong. / Ayat 2: Abang mencuci longkang.', isCorrect: false }
+        ],
+        explanation: "Kata hubung 'manakala' digugurkan untuk memisahkan dua klausa yang mempunyai subjek berbeza (Ayah dan abang)."
+      },
+      {
+        id: 11,
+        tier: 'tinggi',
+        tierBadge: 'Tahap Tinggi: Soalan 9–12',
+        promptSpeech: '"Hampir tiba di garisan penamat! Uji ketajaman tatabahasa kamu pada soalan ini."',
+        question: 'Antara ayat majmuk yang berikut, manakah yang menggunakan kata hubung dengan betul?',
+        stimulus: '',
+        options: [
+          { text: 'Kamu hendak minum air milo tetapi air sirap?', isCorrect: false },
+          { text: 'Adik memakai baju hujan atau hari hujan lebat.', isCorrect: false },
+          { text: 'Farid rajin mengulang kaji pelajaran supaya berjaya dalam ujian.', isCorrect: true },
+          { text: 'Kakak membaca buku cerita kerana menunggu bas sekolah.', isCorrect: false }
+        ],
+        explanation: "Kata hubung 'supaya' tepat digunakan untuk menyatakan tujuan atau harapan."
+      },
+      {
+        id: 12,
+        tier: 'tinggi',
+        tierBadge: 'Tahap Tinggi: Soalan 9–12',
+        promptSpeech: '"Cabaran terakhir misi kita! Tunjukkan kefahaman sebenar kamu, koboi muda!"',
+        question: 'Gabungkan dua ayat tunggal di bawah menjadi satu ayat majmuk yang paling gramatis.',
+        stimulus: 'Ayat 1: Kita mestilah makan makanan yang berkhasiat.\nAyat 2: Badan kita sentiasa sihat dan cergas.',
+        options: [
+          { text: 'Kita mestilah makan makanan yang berkhasiat tetapi badan kita sentiasa sihat.', isCorrect: false },
+          { text: 'Kita mestilah makan makanan yang berkhasiat atau badan kita sentiasa sihat.', isCorrect: false },
+          { text: 'Kita mestilah makan makanan yang berkhasiat sambil badan kita sentiasa sihat.', isCorrect: false },
+          { text: 'Kita mestilah makan makanan yang berkhasiat supaya badan kita sentiasa sihat.', isCorrect: true }
+        ],
+        explanation: "Kata hubung 'supaya' paling gramatis kerana menunjukkan tujuan pemakanan berkhasiat adalah untuk kesihatan badan."
+      }
+    ];
+
+    // ==================== PEMBOLEH UBAH KEADAAN KUIZ ====================
+    let currentIndex = 0;
+    let score = 0;
+    let answered = false;
+    let studentName = '';
+    let studentClass = '';
+    let userRecords = [];
+    let isReviewOpen = false;
+    let latestPayload = null;
+
+    // Papar maskot Syerif Arif pada skrin pendaftaran semasa dimuatkan
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('startMascotBox').innerHTML = getSheriffSvg('neutral', 'w-24 h-24 sm:w-28 sm:h-28');
+    });
+
+    // ==================== FUNGSI BANTUAN INPUT PENDAFTARAN ====================
+    function pilihKelasPantas(namaKelas) {
+      playTone('woodClick');
+      document.getElementById('studentClass').value = namaKelas;
+      clearStartError();
+    }
+
+    function clearStartError() {
+      document.getElementById('startErrorMsg').classList.add('hidden');
+    }
+
+    function getMalayDateString() {
+      const months = [
+        'Januari', 'Februari', 'Mac', 'April', 'Mei', 'Jun',
+        'Julai', 'Ogos', 'September', 'Oktober', 'November', 'Disember'
+      ];
+      const now = new Date();
+      return `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+    }
+
+    // ==================== FUNGSI MULA & PAPARAN SOALAN ====================
+    function startQuiz() {
+      playTone('woodClick');
+      const nameInput = document.getElementById('studentName').value.trim();
+      const classInput = document.getElementById('studentClass').value.trim();
+
+      if (!nameInput || !classInput) {
+        const errEl = document.getElementById('startErrorMsg');
+        errEl.classList.remove('hidden');
+        errEl.classList.add('animate-shake');
+        setTimeout(() => errEl.classList.remove('animate-shake'), 450);
+        return;
+      }
+
+      studentName = nameInput;
+      studentClass = classInput;
+
+      currentIndex = 0;
+      score = 0;
+      answered = false;
+      userRecords = [];
+      latestPayload = null;
+
+      document.getElementById('hudStudentName').textContent = `🤠 ${studentName} (${studentClass})`;
+      document.getElementById('startScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.add('hidden');
+      document.getElementById('quizScreen').classList.remove('hidden');
+
+      renderQuestion();
+    }
+
+    function updateProgressTrail() {
+      const total = preTestQuestions.length;
+      const dotsContainer = document.getElementById('trailDotsContainer');
+      dotsContainer.innerHTML = '';
+
+      for (let i = 0; i < total; i++) {
+        const dot = document.createElement('div');
+        const record = userRecords[i];
+
+        let dotClass = 'w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-extrabold border-2 transition-all ';
+        let label = `${i + 1}`;
+
+        if (record) {
+          if (record.isCorrect) {
+            dotClass += 'bg-emerald-500 border-emerald-950 text-white shadow-sm';
+            label = '★';
+          } else {
+            dotClass += 'bg-rose-500 border-rose-950 text-white shadow-sm';
+            label = '•';
+          }
+        } else if (i === currentIndex) {
+          dotClass += 'bg-[#FFD700] border-amber-950 text-amber-950 scale-115 shadow';
+        } else {
+          dotClass += 'bg-amber-900 border-amber-700 text-amber-300';
+        }
+
+        dot.className = dotClass;
+        dot.textContent = label;
+        dotsContainer.appendChild(dot);
+      }
+
+      const stepPct = (currentIndex / (total - 1)) * 100;
+      document.getElementById('trailFill').style.width = `calc(${stepPct}% - 8px)`;
+      document.getElementById('horseMarker').style.left = `calc(${stepPct}% + ${8 - (stepPct * 0.16)}px)`;
+    }
+
+    function renderQuestion() {
+      answered = false;
+      const q = preTestQuestions[currentIndex];
+
+      document.getElementById('qCounter').textContent = currentIndex + 1;
+      document.getElementById('scoreCounter').textContent = score;
+      updateProgressTrail();
+
+      // Kemas kini lencana tahap semasa
+      const levelBadge = document.getElementById('levelBadge');
+      levelBadge.textContent = q.tierBadge;
+      levelBadge.className = 'font-bold text-xs px-3 py-1 rounded-lg border ';
+      if (q.tier === 'rendah') {
+        levelBadge.className += 'bg-emerald-200 text-emerald-950 border-emerald-600';
+      } else if (q.tier === 'sederhana') {
+        levelBadge.className += 'bg-amber-200 text-amber-950 border-amber-600';
+      } else {
+        levelBadge.className += 'bg-rose-200 text-rose-950 border-rose-600';
+      }
+
+      // Tetapkan semula ekspresi & gelembung kata Syerif Arif (tanpa petunjuk)
+      const mascotContainer = document.getElementById('quizMascotContainer');
+      mascotContainer.innerHTML = getSheriffSvg('neutral', 'w-16 h-16 sm:w-20 sm:h-20');
+      mascotContainer.classList.remove('animate-happy', 'animate-shake');
+      document.getElementById('mascotSpeech').textContent = q.promptSpeech;
+
+      // Paparkan teks soalan & kotak ayat rangsangan jika ada
+      document.getElementById('questionText').textContent = `${currentIndex + 1}. ${q.question}`;
+      const stimulusBox = document.getElementById('stimulusBox');
+      if (q.stimulus) {
+        document.getElementById('stimulusText').textContent = q.stimulus;
+        stimulusBox.classList.remove('hidden');
+      } else {
+        stimulusBox.classList.add('hidden');
+      }
+
+      // Sembunyikan panel penjelasan sebelum murid menjawab
+      document.getElementById('feedbackPanel').classList.add('hidden');
+
+      // Bina 4 pilihan jawapan (A, B, C, D)
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = '';
+      const letters = ['A', 'B', 'C', 'D'];
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-card w-full text-left p-3.5 sm:p-4 rounded-2xl flex items-start sm:items-center gap-3.5 cursor-pointer';
+        btn.onclick = () => selectOption(idx);
+
+        btn.innerHTML = `
+          <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-800 text-amber-50 font-extrabold text-sm sm:text-base flex items-center justify-center shrink-0 shadow-sm">
+            ${letters[idx]}
+          </span>
+          <span class="text-sm sm:text-lg font-semibold text-amber-950 leading-snug">
+            ${opt.text}
+          </span>
+        `;
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function selectOption(selectedIdx) {
+      if (answered) return;
+      answered = true;
+
+      const q = preTestQuestions[currentIndex];
+      const letters = ['A', 'B', 'C', 'D'];
+      const selectedOpt = q.options[selectedIdx];
+      const isCorrect = selectedOpt.isCorrect;
+      const correctIdx = q.options.findIndex(o => o.isCorrect);
+      const correctOpt = q.options[correctIdx];
+
+      const optionButtons = document.getElementById('optionsContainer').children;
+      const mascotContainer = document.getElementById('quizMascotContainer');
+      const feedbackPanel = document.getElementById('feedbackPanel');
+
+      for (let i = 0; i < optionButtons.length; i++) {
+        optionButtons[i].disabled = true;
+        optionButtons[i].classList.remove('cursor-pointer');
+        if (q.options[i].isCorrect) {
+          optionButtons[i].classList.add('option-correct');
+        } else if (i === selectedIdx && !isCorrect) {
+          optionButtons[i].classList.add('option-wrong');
+        } else {
+          optionButtons[i].classList.add('opacity-65');
+        }
+      }
+
+      userRecords.push({
+        id: q.id,
+        tier: q.tier,
+        tierBadge: q.tierBadge,
+        question: q.question,
+        stimulus: q.stimulus,
+        userLetter: letters[selectedIdx],
+        userAnswer: selectedOpt.text,
+        correctLetter: letters[correctIdx],
+        correctAnswer: correctOpt.text,
+        explanation: q.explanation,
+        isCorrect: isCorrect
+      });
+
+      updateProgressTrail();
+
+      feedbackPanel.classList.remove(
+        'hidden',
+        'bg-emerald-50',
+        'border-emerald-600',
+        'text-emerald-950',
+        'bg-rose-50',
+        'border-rose-600',
+        'text-rose-950'
+      );
+
+      if (isCorrect) {
+        score++;
+        document.getElementById('scoreCounter').textContent = score;
+        playTone('correct');
+        triggerStarConfetti();
+
+        mascotContainer.innerHTML = getSheriffSvg('happy', 'w-16 h-16 sm:w-20 sm:h-20');
+        mascotContainer.classList.add('animate-happy');
+        document.getElementById('mascotSpeech').textContent = '"Yeehaw! Hebat sekali, koboi! Jawapan kamu sangat tepat!"';
+
+        feedbackPanel.classList.add('bg-emerald-50', 'border-emerald-600', 'text-emerald-950');
+        document.getElementById('feedbackIcon').textContent = '⭐';
+        document.getElementById('feedbackTitle').textContent = 'Syabas! Kamu mendapat 1 Bintang Emas!';
+      } else {
+        playTone('wrong');
+
+        mascotContainer.innerHTML = getSheriffSvg('encourage', 'w-16 h-16 sm:w-20 sm:h-20');
+        mascotContainer.classList.add('animate-shake');
+        document.getElementById('mascotSpeech').textContent = '"Jangan berputus asa, koboi! Mari baca penjelasan tatabahasa ini."';
+
+        feedbackPanel.classList.add('bg-rose-50', 'border-rose-600', 'text-rose-950');
+        document.getElementById('feedbackIcon').textContent = '🌵';
+        document.getElementById('feedbackTitle').textContent = 'Jawapan Kurang Tepat — Semak Penjelasan:';
+      }
+
+      document.getElementById('feedbackExplanation').textContent = q.explanation;
+      document.getElementById('nextBtnText').textContent =
+        currentIndex === preTestQuestions.length - 1 ? 'Lihat Keputusan Ujian Pra 🏆' : 'Soalan Seterusnya ➔';
+    }
+
+    function nextQuestion() {
+      playTone('woodClick');
+      if (currentIndex < preTestQuestions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    // ==================== PENENTUAN GELARAN PENCAPAIAN ====================
+    function getAchievementRank(jumlahBetul) {
+      if (jumlahBetul >= 10) return 'Syerif Utama';
+      if (jumlahBetul >= 7) return 'Penolong Syerif';
+      if (jumlahBetul >= 4) return 'Koboi Muda';
+      return 'Perantis Koboi';
+    }
+
+    // ==================== SKRIN KEPUTUSAN & AUTO-HANTAR GOOGLE SHEETS ====================
+    function showResults() {
+      playTone('fanfare');
+      triggerStarConfetti();
+
+      document.getElementById('quizScreen').classList.add('hidden');
+      document.getElementById('resultScreen').classList.remove('hidden');
+
+      const percent = Math.round((score / preTestQuestions.length) * 100);
+      const dateStr = getMalayDateString();
+      const gelaranPencapaian = getAchievementRank(score);
+
+      const lowScore = userRecords.filter(r => r.tier === 'rendah' && r.isCorrect).length;
+      const midScore = userRecords.filter(r => r.tier === 'sederhana' && r.isCorrect).length;
+      const highScore = userRecords.filter(r => r.tier === 'tinggi' && r.isCorrect).length;
+
+      document.getElementById('rankTitle').textContent = gelaranPencapaian;
+      document.getElementById('resultStudentMeta').textContent = `Murid: ${studentName} • Kelas: ${studentClass}`;
+      document.getElementById('resultDateText').textContent = `Tarikh: ${dateStr}`;
+      document.getElementById('finalScoreText').textContent = `${score} / 12`;
+      document.getElementById('finalPercentText').textContent = `${percent}%`;
+      document.getElementById('finalStarsText').textContent = `${score} ⭐`;
+
+      document.getElementById('tierLowScore').textContent = `${lowScore} / 4`;
+      document.getElementById('tierLowStatus').textContent = getTierRemark(lowScore);
+
+      document.getElementById('tierMidScore').textContent = `${midScore} / 4`;
+      document.getElementById('tierMidStatus').textContent = getTierRemark(midScore);
+
+      document.getElementById('tierHighScore').textContent = `${highScore} / 4`;
+      document.getElementById('tierHighStatus').textContent = getTierRemark(highScore);
+
+      // Tetapkan semula bahagian Semakan Jawapan Lengkap
+      isReviewOpen = false;
+      document.getElementById('reviewContainer').classList.add('hidden');
+      document.getElementById('reviewChevron').textContent = 'Buka ▼';
+      document.getElementById('copyToast').classList.add('hidden');
+
+      const reviewContainer = document.getElementById('reviewContainer');
+      reviewContainer.innerHTML = '';
+
+      userRecords.forEach((rec) => {
+        const item = document.createElement('div');
+        item.className = `p-3.5 rounded-2xl border-2 ${
+          rec.isCorrect ? 'bg-emerald-50/95 border-emerald-500' : 'bg-rose-50/95 border-rose-500'
+        }`;
+
+        item.innerHTML = `
+          <div class="flex items-start justify-between gap-2 mb-1">
+            <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-200 text-amber-950">
+              ${rec.tierBadge}
+            </span>
+            <span class="text-xs sm:text-sm font-bold shrink-0">${rec.isCorrect ? '✅ Betul' : '❌ Kurang Tepat'}</span>
+          </div>
+          <p class="font-bold text-xs sm:text-sm text-amber-950 mb-1.5">
+            Soalan ${rec.id}: ${rec.question}
+          </p>
+          ${
+            rec.stimulus
+              ? `<div class="text-xs bg-amber-100/90 border-l-4 border-amber-800 px-2.5 py-1.5 rounded-r-lg text-amber-950 font-semibold whitespace-pre-line mb-2">${rec.stimulus}</div>`
+              : ''
+          }
+          <div class="text-xs sm:text-sm space-y-1 bg-white/85 rounded-xl p-2.5 border border-amber-200">
+            <div class="${rec.isCorrect ? 'text-emerald-800 font-bold' : 'text-rose-800 font-bold'}">
+              Jawapan Murid (${rec.userLetter}): ${rec.userAnswer}
+            </div>
+            ${
+              !rec.isCorrect
+                ? `<div class="text-emerald-800 font-bold">Jawapan Betul (${rec.correctLetter}): ${rec.correctAnswer}</div>`
+                : ''
+            }
+            <div class="text-amber-900 text-xs pt-1 border-t border-amber-200/80">
+              <strong>Penjelasan Tatabahasa:</strong> ${rec.explanation}
+            </div>
+          </div>
+        `;
+        reviewContainer.appendChild(item);
+      });
+
+      // Sediakan struktur objek JSON payload tepat mengikut Code.gs
+      const array12Boolean = userRecords.map(r => Boolean(r.isCorrect));
+      const ringkasanString = userRecords
+        .map(r => `S${r.id}:${r.isCorrect ? '✓' : '✗'}`)
+        .join(', ');
+
+      latestPayload = {
+        action: "submit",
+        nama: studentName,
+        kelas: studentClass,
+        skorRendah: `${lowScore}/4`,
+        skorSederhana: `${midScore}/4`,
+        skorTinggi: `${highScore}/4`,
+        jumlahMarkah: score,
+        peratus: percent,
+        gelaran: gelaranPencapaian,
+        jawapanSoalan: array12Boolean,
+        perincianJawapan: ringkasanString
+      };
+
+      // Auto-hantar rekod Ujian Pra ke Google Sheets
+      hantarRekodKeGoogleSheets();
+    }
+
+    async function hantarRekodKeGoogleSheets() {
+      if (!latestPayload) return;
+
+      const statusBox = document.getElementById('sheetsStatusBox');
+      const statusText = document.getElementById('sheetsStatusText');
+      const retryBtn = document.getElementById('retrySubmitBtn');
+
+      // Keadaan semasa menghantar
+      statusBox.className = 'max-w-xl mx-auto my-4 p-3.5 rounded-2xl border-2 bg-amber-100 border-amber-600 text-amber-950 transition-all';
+      statusText.textContent = '⏳ Sedang menyimpan rekod ke Google Sheets...';
+      retryBtn.classList.add('hidden');
+
+      try {
+        const response = await fetch(GOOGLE_SHEETS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(latestPayload)
+        });
+
+        const hasil = await response.json();
+        if (hasil && hasil.status === "success") {
+          statusBox.className = 'max-w-xl mx-auto my-4 p-3.5 rounded-2xl border-2 bg-emerald-100 border-emerald-600 text-emerald-950 transition-all';
+          statusText.textContent = '✅ Rekod Ujian Pra berjaya disimpan ke Google Sheets!';
+        } else {
+          throw new Error(hasil && hasil.message ? hasil.message : 'Ralat respons pelayan');
+        }
+      } catch (err) {
+        // Sandaran mode: "no-cors" jika berlaku sekatan CORS pada pelayar / fail tempatan
+        try {
+          if (!navigator.onLine) {
+            throw new Error('Tiada sambungan internet');
+          }
+          await fetch(GOOGLE_SHEETS_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(latestPayload)
+          });
+
+          statusBox.className = 'max-w-xl mx-auto my-4 p-3.5 rounded-2xl border-2 bg-emerald-100 border-emerald-600 text-emerald-950 transition-all';
+          statusText.textContent = '✅ Rekod Ujian Pra berjaya disimpan ke Google Sheets!';
+        } catch (fallbackErr) {
+          statusBox.className = 'max-w-xl mx-auto my-4 p-3.5 rounded-2xl border-2 bg-rose-100 border-rose-600 text-rose-950 transition-all';
+          statusText.textContent = '⚠️ Gagal menyambung ke Google Sheets.';
+          retryBtn.classList.remove('hidden');
+        }
+      }
+    }
+
+    // ==================== MODAL RESET REKOD GURU MENGGUNAKAN PIN ====================
+    function openResetModal() {
+      playTone('woodClick');
+      const modal = document.getElementById('resetModal');
+      const pinInput = document.getElementById('teacherPinInput');
+      const feedbackEl = document.getElementById('resetModalFeedback');
+      const confirmBtn = document.getElementById('confirmResetBtn');
+
+      pinInput.value = '';
+      feedbackEl.classList.add('hidden');
+      feedbackEl.textContent = '';
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = 'Sahkan & Reset Rekod';
+
+      modal.classList.remove('hidden');
+      setTimeout(() => pinInput.focus(), 100);
+    }
+
+    function closeResetModal() {
+      playTone('woodClick');
+      document.getElementById('resetModal').classList.add('hidden');
+    }
+
+    async function confirmResetRecords() {
+      playTone('woodClick');
+      const pinDimasukkan = document.getElementById('teacherPinInput').value.trim();
+      const feedbackEl = document.getElementById('resetModalFeedback');
+      const confirmBtn = document.getElementById('confirmResetBtn');
+
+      if (!pinDimasukkan) {
+        feedbackEl.className = 'mb-4 p-3 rounded-xl border-2 bg-rose-100 border-rose-500 text-rose-900 text-xs sm:text-sm font-bold';
+        feedbackEl.textContent = '⚠️ Sila masukkan PIN Guru terlebih dahulu.';
+        feedbackEl.classList.remove('hidden');
+        return;
+      }
+
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = '⏳ Memproses...';
+      feedbackEl.className = 'mb-4 p-3 rounded-xl border-2 bg-amber-100 border-amber-500 text-amber-950 text-xs sm:text-sm font-bold';
+      feedbackEl.textContent = '⏳ Sedang mengesahkan PIN Guru dengan Google Sheets...';
+      feedbackEl.classList.remove('hidden');
+
+      try {
+        const respon = await fetch(GOOGLE_SHEETS_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            action: "reset",
+            pin: pinDimasukkan
+          })
+        });
+
+        const hasil = await respon.json();
+        if (hasil && hasil.status === "success") {
+          feedbackEl.className = 'mb-4 p-3 rounded-xl border-2 bg-emerald-100 border-emerald-600 text-emerald-950 text-xs sm:text-sm font-bold';
+          feedbackEl.textContent = `✅ ${hasil.message}`;
+          document.getElementById('teacherPinInput').value = '';
+        } else {
+          feedbackEl.className = 'mb-4 p-3 rounded-xl border-2 bg-rose-100 border-rose-600 text-rose-950 text-xs sm:text-sm font-bold';
+          feedbackEl.textContent = `❌ ${hasil && hasil.message ? hasil.message : 'PIN Guru tidak sah!'}`;
+        }
+      } catch (err) {
+        feedbackEl.className = 'mb-4 p-3 rounded-xl border-2 bg-rose-100 border-rose-600 text-rose-950 text-xs sm:text-sm font-bold';
+        feedbackEl.textContent = '⚠️ Gagal menyambung ke pelayan Google Sheets. Sila semak sambungan internet anda.';
+      } finally {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Sahkan & Reset Rekod';
+      }
+    }
+
+    // ==================== SEMAKAN JAWAPAN, SALIN REKOD & MAIN SEMULA ====================
+    function toggleReviewSection() {
+      playTone('woodClick');
+      isReviewOpen = !isReviewOpen;
+      const reviewContainer = document.getElementById('reviewContainer');
+      const reviewChevron = document.getElementById('reviewChevron');
+
+      if (isReviewOpen) {
+        reviewContainer.classList.remove('hidden');
+        reviewChevron.textContent = 'Tutup ▲';
+      } else {
+        reviewContainer.classList.add('hidden');
+        reviewChevron.textContent = 'Buka ▼';
+      }
+    }
+
+    function getTierRemark(tierScore) {
+      if (tierScore === 4) return 'Sangat Cemerlang!';
+      if (tierScore === 3) return 'Baik & Menguasai';
+      if (tierScore === 2) return 'Sederhana, teruskan usaha';
+      return 'Perlu bimbingan lanjut';
+    }
+
+    function copyReport() {
+      playTone('woodClick');
+      const percent = Math.round((score / preTestQuestions.length) * 100);
+      const dateStr = getMalayDateString();
+      const lowScore = userRecords.filter(r => r.tier === 'rendah' && r.isCorrect).length;
+      const midScore = userRecords.filter(r => r.tier === 'sederhana' && r.isCorrect).length;
+      const highScore = userRecords.filter(r => r.tier === 'tinggi' && r.isCorrect).length;
+      const rankTitle = document.getElementById('rankTitle').textContent;
+
+      const summaryText =
+`🤠 REKOD MISI KOBOI TATABAHASA: UJIAN PRA
+Topik: Ayat Tunggal dan Ayat Majmuk (Tahun 3 SK)
+Nama Murid: ${studentName}
+Kelas: ${studentClass}
+Tarikh: ${dateStr}
+Gelaran Pencapaian: ${rankTitle}
+Jumlah Markah: ${score} / 12 (${percent}%)
+
+📊 Pecahan Skor Mengikut Tahap:
+• Tahap Rendah (S1–S4): ${lowScore} / 4
+• Tahap Sederhana (S5–S8): ${midScore} / 4
+• Tahap Tinggi (S9–S12): ${highScore} / 4`;
+
+      const tempTextArea = document.createElement('textarea');
+      tempTextArea.value = summaryText;
+      tempTextArea.style.position = 'fixed';
+      tempTextArea.style.left = '-9999px';
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempTextArea);
+
+      const toast = document.getElementById('copyToast');
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+
+    function restartQuiz() {
+      playTone('woodClick');
+      document.getElementById('resultScreen').classList.add('hidden');
+      document.getElementById('startScreen').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
